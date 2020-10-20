@@ -9,5 +9,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         println("This is after the first commit")
+
+        all these lines are intentionally added to produce errors!
     }
 }
