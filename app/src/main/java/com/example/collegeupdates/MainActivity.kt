@@ -9,5 +9,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         println("This is after the first commit")
+        println("This is after the 5th commit but is meaningful")
     }
 }
