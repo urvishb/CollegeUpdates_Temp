@@ -10,6 +10,6 @@ class MainActivity : AppCompatActivity() {
 
         println("This is after the first commit")
 
-        this is intentional lines to produce errors
+        all these lines are intentionally added to produce errors!
     }
 }
