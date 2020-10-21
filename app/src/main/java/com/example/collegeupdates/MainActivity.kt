@@ -15,5 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         println("this line will be merged via command line!")
 
+        println("Hello from the other universe friend!")
+
     }
 }
