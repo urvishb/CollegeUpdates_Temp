@@ -11,5 +11,7 @@ class MainActivity : AppCompatActivity() {
         println("This is after the first commit")
         println("Local changes")
         println("These Changes are change 2")
+        println("this line will be merged via command line!")
+
     }
 }
