@@ -10,7 +10,9 @@ class MainActivity : AppCompatActivity() {
 
         println("This is after the first commit")
         println("Local changes")
-        println("These Changes are change 4")
+
+        println("These Changes are change 5 cmd")
+
         println("this line will be merged via command line!")
 
     }
