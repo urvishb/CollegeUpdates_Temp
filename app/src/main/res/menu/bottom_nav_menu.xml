@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miNotice"
+        android:title="@string/notices"
+        android:icon="@drawable/ic_notice_foreground"/>
+
+    <item
+        android:id="@+id/miEvents"
+        android:icon="@drawable/ic_events_foreground"
+        android:title="@string/events" />
+
+    <item
+        android:id="@+id/miBuses"
+        android:title="@string/transport"
+        android:icon="@drawable/ic_transport_foreground"/>
+
+</menu>
