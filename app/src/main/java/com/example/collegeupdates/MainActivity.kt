@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_notice.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val firstFragment = EventsFrag()
         val secondFragment = NoticeFrag()
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         bottomNavigationView.getOrCreateBadge(R.id.miEvents).apply {
-            number = 4
+            number = 7
             isVisible = true
         }
 
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             number = 2
             isVisible = true
         }
+
     }
 
     private fun setCurrentFragment(fragment: Fragment) =
