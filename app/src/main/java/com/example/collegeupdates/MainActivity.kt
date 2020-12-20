@@ -30,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         bottomNavigationView.getOrCreateBadge(R.id.miEvents).apply {
-            number = 7
+            number = 4
             isVisible = true
         }
 
         bottomNavigationView.getOrCreateBadge(R.id.miNotice).apply {
-            number = 2
+            number = 1
             isVisible = true
         }
 
