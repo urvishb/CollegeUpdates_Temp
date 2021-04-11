@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
-    <color name="justWhite">#FFF</color>
-    <color name="addColor">#9900ff</color>
-    <color name="justBlack">#000</color>
+    <!--<color name="colorPrimary">#6200EE</color>-->
+    <!--<color name="colorPrimaryDark">#3700B3</color>-->
+
+    <!--<color name="justWhite">#FFF</color>-->
+
+    <!--<color name="justBlack">#000</color>-->
+
+    <color name="justBlack">#FF000000</color>
+    <color name="justWhite">#FFFFFFFF</color>
+
+    <color name="orange">#ff6a00</color>
+    <color name="orangeLight">#ff9b3f</color>
+    <color name="orangeDark">#c43800</color>
+    <color name="blue">#2196f3</color>
+    <color name="blueLight">#6ec6ff</color>
+    <color name="blueDark">#0069c0</color>
+    <color name="TextColorPrimary">#000000</color>
+    <color name="TextColorSecondary">#000000</color>
+
+
+    <color name="addColor">#0069c0</color>
+    <color name="colorAccent">#6ec6ff</color>
 </resources>

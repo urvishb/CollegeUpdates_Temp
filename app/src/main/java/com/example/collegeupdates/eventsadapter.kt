@@ -1,36 +1,45 @@
 package com.example.collegeupdates
 
+import android.content.Context
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import java.util.ArrayList
+import com.bumptech.glide.Glide
+import com.example.collegeupdates.models.Post
+import kotlinx.android.synthetic.main.single_row_design_events.view.*
 
-class eventsadapter(var dataholder: ArrayList<Datamodel>) : RecyclerView.Adapter<eventsadapter.Myviewholder>() {
+class eventsadapter (val context: Context, val posts: List<Post>) : RecyclerView.Adapter<eventsadapter.Myviewholder>() {
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Myviewholder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.single_row_design_events, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.single_row_design_events, parent, false)
         return Myviewholder(view)
     }
 
     override fun onBindViewHolder(holder: Myviewholder, position: Int) {
-        holder.img.setImageResource(dataholder[position].image)
-        holder.header.text = dataholder[position].header
-        holder.desc.text = dataholder[position].desc
+        holder.bind(posts[position])
+
+
     }
 
-    override fun getItemCount(): Int {
-        return dataholder.size
-    }
+    override fun getItemCount() = posts.size
 
     inner class Myviewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var img: ImageView = itemView.findViewById(R.id.rvimage)
-        var header: TextView = itemView.findViewById(R.id.myheader)
-        var desc: TextView = itemView.findViewById(R.id.mydesc)
+        fun bind(post: Post) {
+            itemView.myheader.text = post.location
+            Glide.with(context).load(post.imageUrl).into(itemView.rvimage)
+            itemView.mydesc.text = DateUtils.getRelativeTimeSpanString(post.creationTimeMs)
+
+        }
 
     }
+}
+
+interface EventItemClicked {
+    fun onItemClicked(post: Post)
 }

@@ -3,4 +3,6 @@
     <string name="notices">Notices</string>
     <string name="events">Events</string>
     <string name="transport">Transport</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

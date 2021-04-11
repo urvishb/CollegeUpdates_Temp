@@ -1,12 +1,31 @@
 package com.example.collegeupdates
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.collegeupdates.models.Post
+import com.example.collegeupdates.models.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_notice.*
+import java.util.Timer
 
-class MainActivity : AppCompatActivity() {
+private const val TAG = "MainActivity"
+const val EXTRA_USERNAME = "EXTRA_USERNAME"
+
+class MainActivity : AppCompatActivity(){
+
+    private var signedInUser: User? = null
+    private lateinit var firestoreDb: FirebaseFirestore
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,15 +49,47 @@ class MainActivity : AppCompatActivity() {
         }
 
         bottomNavigationView.getOrCreateBadge(R.id.miEvents).apply {
-            number = 4
             isVisible = true
+            backgroundColor = ContextCompat.getColor(this@MainActivity, R.color.blue)
+
         }
 
         bottomNavigationView.getOrCreateBadge(R.id.miNotice).apply {
-            number = 1
+            backgroundColor = ContextCompat.getColor(this@MainActivity, R.color.blue)
             isVisible = true
         }
 
+
+        // FireBase query for username
+        firestoreDb = FirebaseFirestore.getInstance() // this is the root
+
+        firestoreDb.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser?.uid as String)
+            .get()
+            .addOnSuccessListener { userSnapshot ->
+                signedInUser = userSnapshot.toObject(User::class.java)
+                Log.i(TAG, "signed in user: $signedInUser")
+            }
+            .addOnFailureListener{ exception ->
+                Log.i(TAG, "Failure fetching signed in user", exception)
+            }
+
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_posts, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.menu_profile)
+        {
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra(EXTRA_USERNAME, signedInUser?.username)
+            startActivity(intent)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setCurrentFragment(fragment: Fragment) =
@@ -46,4 +97,6 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.flFragment, fragment)
             commit()
         }
+
+
 }

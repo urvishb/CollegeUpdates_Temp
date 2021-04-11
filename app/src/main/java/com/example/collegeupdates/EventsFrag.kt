@@ -1,20 +1,36 @@
 package com.example.collegeupdates
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.annotation.RequiresPermission
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.collegeupdates.databinding.FragmentEventsBinding
+import com.example.collegeupdates.models.Post
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.fragment_events.*
 import kotlinx.android.synthetic.main.fragment_events.view.*
+import kotlinx.android.synthetic.main.single_row_design_events.view.*
 
-class EventsFrag : Fragment(R.layout.fragment_events) {
+private const val TAG = "EventsFrag"
+class EventsFrag : Fragment(R.layout.fragment_events){
+
+    private lateinit var firestoreDb: FirebaseFirestore
+    private lateinit var posts: MutableList<Post>
+    private lateinit var adapter: eventsadapter
+
+
+
 
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.rotate_open_anim) }
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.rotate_close_anim) }
@@ -39,35 +55,40 @@ class EventsFrag : Fragment(R.layout.fragment_events) {
         savedInstanceState: Bundle?
     ): View? {
 
-
         val view = inflater.inflate(R.layout.fragment_events, container, false)
         recyclerView = view.findViewById(R.id.rvevents)
-        recyclerView.setLayoutManager(LinearLayoutManager(context))
-        dataholder = ArrayList()
 
-        val ob1 = Datamodel(R.drawable.img5, "Auditorium", "10:45 AM")
-        dataholder.add(ob1)
-        val ob2 = Datamodel(R.drawable.img2, "Block I", "8:01 AM")
-        dataholder.add(ob2)
-        val ob3 = Datamodel(R.drawable.img3, "G20", "11:53 AM")
-        dataholder.add(ob3)
-        val ob4 = Datamodel(R.drawable.img3, "EC Dept", "12:43 PM")
-        dataholder.add(ob4)
-        val ob5 = Datamodel(R.drawable.img1, "Basketball Court", "1:05 PM")
-        dataholder.add(ob5)
-        val ob6 = Datamodel(R.drawable.img6, "CDC", "1:45 PM")
-        dataholder.add(ob6)
-        val ob7 = Datamodel(R.drawable.img7, "CSE Dept", "3:45 PM")
-        dataholder.add(ob7)
-        val ob8 = Datamodel(R.drawable.img4, "Auditorium", "4:40 PM")
-        dataholder.add(ob8)
-        val ob9 = Datamodel(R.drawable.img7, "Block III", "5:05 PM")
-        dataholder.add(ob9)
-        val ob10 = Datamodel(R.drawable.img2, "MBA Block", "5:12 PM")
-        dataholder.add(ob10)
+        // Create the Layout File which represents one post (CardView)- Done
+        // Create Data Source - Done
+        posts = mutableListOf()
+        // Create the adapter
+        adapter = eventsadapter(context!!, posts)
+        // Bind the adapter and Layout manager to the RV
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
 
-        recyclerView.adapter = eventsadapter(dataholder)
+        // FireBase
+        firestoreDb = FirebaseFirestore.getInstance() // this is the root
+        val postsReference = firestoreDb
+            .collection("posts")
+            .limit(20)
+            .orderBy("creation_time_ms", Query.Direction.DESCENDING)
+        postsReference.addSnapshotListener { snapshot, exception ->
+            //This is just an error check
+            if (exception != null || snapshot == null) {
+                Log.e(TAG, "Exception when querying posts", exception)
+                return@addSnapshotListener
+            }
+            val postList = snapshot.toObjects(Post::class.java)
+            posts.clear()
+            posts.addAll(postList)
+            adapter.notifyDataSetChanged()
+            for (post in postList) {
+                Log.i(TAG, "Post ${post}")
+            }
+        }
+
 
         view.AddButton.setOnClickListener {
             onAddButtonClicked()
@@ -78,7 +99,8 @@ class EventsFrag : Fragment(R.layout.fragment_events) {
         }
 
         view.CameraButton.setOnClickListener {
-            Toast.makeText(context, "Camera was Clicked", Toast.LENGTH_SHORT).show()
+           val intent = Intent(context, CreateCamActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -129,5 +151,14 @@ class EventsFrag : Fragment(R.layout.fragment_events) {
         }
 
     }
+
+    fun onItemClicked(post: Post) {
+
+        val toast = Toast.makeText(context, post.location, Toast.LENGTH_SHORT)
+        toast.show()
+
+    }
+
+
 
 }

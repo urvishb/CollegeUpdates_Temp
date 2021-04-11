@@ -20,10 +20,10 @@
             android:layout_marginStart="0dp"
             android:foregroundGravity="center"
             android:src="@mipmap/ic_launcher"
-            app:civ_border_color="#3f51b5"
-            app:civ_border_width="2.5dp"
+            app:civ_border_color="@color/blueLight"
+            app:civ_border_width="3dp"
             app:civ_shadow="true"
-            app:civ_shadow_color="#3f51b5"
+            app:civ_shadow_color="@color/blueLight"
             app:civ_shadow_radius="0dp" />
 
 
@@ -47,7 +47,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="12dp"
             android:text="This is the Header Text"
-            android:textColor="#000"
+            android:textColor="@color/TextColorPrimary"
             android:textSize="15sp"
             android:textStyle="bold"
             android:layout_toEndOf="@id/rvimage"
