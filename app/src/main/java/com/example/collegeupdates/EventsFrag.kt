@@ -45,7 +45,6 @@ class EventsFrag : Fragment(R.layout.fragment_events){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
 
@@ -58,7 +57,7 @@ class EventsFrag : Fragment(R.layout.fragment_events){
         val view = inflater.inflate(R.layout.fragment_events, container, false)
         recyclerView = view.findViewById(R.id.rvevents)
 
-        // Create the Layout File which represents one post (CardView)- Done
+        // Create the Layout File which represents one post (CardView) - Done
         // Create Data Source - Done
         posts = mutableListOf()
         // Create the adapter
@@ -94,9 +93,9 @@ class EventsFrag : Fragment(R.layout.fragment_events){
             onAddButtonClicked()
         }
 
-        view.WriteButton.setOnClickListener {
-            Toast.makeText(context, "Write was clicked", Toast.LENGTH_SHORT).show()
-        }
+//        view.WriteButton.setOnClickListener {
+//            Toast.makeText(context, "Write was clicked", Toast.LENGTH_SHORT).show()
+//        }
 
         view.CameraButton.setOnClickListener {
            val intent = Intent(context, CreateCamActivity::class.java)
@@ -118,12 +117,12 @@ class EventsFrag : Fragment(R.layout.fragment_events){
 
     private fun setAnimation(clicked: Boolean) {
         if (!clicked) {
-            WriteButton.startAnimation(fromBottom)
+            //WriteButton.startAnimation(fromBottom)
             CameraButton.startAnimation(fromBottom)
             AddButton.startAnimation(rotateOpen)
         }
         else {
-            WriteButton.startAnimation(toBottom)
+            //WriteButton.startAnimation(toBottom)
             CameraButton.startAnimation(toBottom)
             AddButton.startAnimation(rotateClose)
         }
@@ -131,24 +130,17 @@ class EventsFrag : Fragment(R.layout.fragment_events){
 
     private fun setVisibility(clicked: Boolean) {
         if(!clicked) {
-            WriteButton.visibility = View.VISIBLE
+            //WriteButton.visibility = View.VISIBLE
             CameraButton.visibility = View.VISIBLE
         }
         else {
-            WriteButton.visibility = View.INVISIBLE
+            //WriteButton.visibility = View.INVISIBLE
             CameraButton.visibility = View.INVISIBLE
         }
     }
 
     private fun setClickable(clicked: Boolean) {
-        if(!clicked) {
-            WriteButton.isClickable = false
-            CameraButton.isClickable = false
-        }
-        else {
-            WriteButton.isClickable = true
-            CameraButton.isClickable = true
-        }
+        CameraButton.isClickable = clicked
 
     }
 

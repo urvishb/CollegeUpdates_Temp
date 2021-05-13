@@ -75,9 +75,9 @@ class NoticeFrag : Fragment(R.layout.fragment_notice) {
             onAddButtonClicked()
         }
 
-        view.WriteButton.setOnClickListener {
-            Toast.makeText(context, "Write was clicked", Toast.LENGTH_SHORT).show()
-        }
+//        view.WriteButton.setOnClickListener {
+//            Toast.makeText(context, "Write was clicked", Toast.LENGTH_SHORT).show()
+//        }
 
         view.CameraButton.setOnClickListener {
             Toast.makeText(context, "Camera was Clicked", Toast.LENGTH_SHORT).show()

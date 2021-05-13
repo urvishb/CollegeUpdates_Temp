@@ -30,7 +30,7 @@
         app:srcCompat="@drawable/ic_add"
         />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/WriteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/AddButton"
         app:layout_constraintEnd_toEndOf="@+id/AddButton"
-        app:srcCompat="@drawable/ic_pen" />
+        app:srcCompat="@drawable/ic_pen" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/CameraButton"
@@ -52,8 +52,8 @@
         android:focusable="true"
         app:tint="@color/justWhite"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/WriteButton"
-        app:layout_constraintEnd_toEndOf="@+id/WriteButton"
+        app:layout_constraintBottom_toTopOf="@id/AddButton"
+        app:layout_constraintEnd_toEndOf="@+id/AddButton"
         app:srcCompat="@drawable/ic_camera" />
 
 

@@ -41,22 +41,45 @@ class MainActivity : AppCompatActivity(){
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.miEvents -> setCurrentFragment(firstFragment)
-                R.id.miNotice -> setCurrentFragment(secondFragment)
-                R.id.miBuses -> setCurrentFragment(thirdFragment)
+                R.id.miEvents ->
+                {
+                    setCurrentFragment(firstFragment)
+                }
+                R.id.miNotice -> {
+                    setCurrentFragment(secondFragment)
+                }
+
+                R.id.miBuses -> {
+                    setCurrentFragment(thirdFragment)
+                }
+
             }
             true
         }
 
         bottomNavigationView.getOrCreateBadge(R.id.miEvents).apply {
             isVisible = true
+
+            // TODO if the feed is refreshed then bring the badge back
+//            val selectedItemId = bottomNavigationView.selectedItemId
+//            if(selectedItemId == R.id.miEvents)
+//            {
+//                isVisible = false;
+//            }
             backgroundColor = ContextCompat.getColor(this@MainActivity, R.color.blue)
 
         }
 
         bottomNavigationView.getOrCreateBadge(R.id.miNotice).apply {
-            backgroundColor = ContextCompat.getColor(this@MainActivity, R.color.blue)
             isVisible = true
+            val selectedItemId = bottomNavigationView.selectedItemId
+            // TODO if the feed is refreshed then bring the badge back
+//            if(selectedItemId == R.id.miNotice)
+//            {
+//                isVisible = false;
+//            }
+            backgroundColor = ContextCompat.getColor(this@MainActivity, R.color.blue)
+
         }
 
 
