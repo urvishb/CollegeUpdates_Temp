@@ -48,7 +48,7 @@
             android:layout_marginStart="12dp"
             android:text="This is the Header Text"
             android:textColor="@color/TextColorPrimary"
-            android:textSize="15sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:layout_toEndOf="@id/rvimage"
             android:gravity="center_vertical"/>
@@ -58,11 +58,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:textColor="@color/justBlack"
             android:text="This is the Description Text"
-            android:textSize="12sp"
+            android:ellipsize="marquee"
+            android:textSize="15sp"
             android:layout_toEndOf="@id/rvimage"
             android:layout_below="@id/myheader"
             />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/expandable_layout"
+            android:visibility="visible"
+            android:layout_below="@id/mydesc"
+            android:layout_toEndOf="@id/rvimage"
+            >
+
+            <TextView
+                android:id="@+id/mydescExpanded"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:textColor="@color/justBlack"
+                android:text="This is the Description Text"
+                android:textSize="14sp"
+                />
+
+
+        </RelativeLayout>
 
 
     </RelativeLayout>

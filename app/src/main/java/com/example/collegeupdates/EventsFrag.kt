@@ -3,6 +3,7 @@ package com.example.collegeupdates
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_events.view.*
 import kotlinx.android.synthetic.main.single_row_design_events.view.*
 
 private const val TAG = "EventsFrag"
+const val FragmentValue = "FRAGMENT_VALUE"
 class EventsFrag : Fragment(R.layout.fragment_events){
 
     private lateinit var firestoreDb: FirebaseFirestore
@@ -88,6 +90,18 @@ class EventsFrag : Fragment(R.layout.fragment_events){
             }
         }
 
+        adapter.setOnItemClickListener(object : eventsadapter.onItemClickListner{
+            override fun onItemClick(position: Int) {
+                //Toast.makeText(context, "You Clicked on item no. $position", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(context, StoryActivity::class.java)
+                intent.putExtra("location", posts[position].location)
+                intent.putExtra("imageUrl", posts[position].imageUrl)
+                intent.putExtra("creationTime", DateUtils.getRelativeTimeSpanString(posts[position].creationTimeMs))
+                startActivity(intent)
+            }
+        })
+
 
         view.AddButton.setOnClickListener {
             onAddButtonClicked()
@@ -99,8 +113,11 @@ class EventsFrag : Fragment(R.layout.fragment_events){
 
         view.CameraButton.setOnClickListener {
            val intent = Intent(context, CreateCamActivity::class.java)
+            intent.putExtra(FragmentValue, "events")
             startActivity(intent)
         }
+
+
 
 
         return view

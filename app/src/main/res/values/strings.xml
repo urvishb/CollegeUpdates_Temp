@@ -19,4 +19,5 @@
         <item>Ground</item>
         <item>MBA Block</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 </resources>

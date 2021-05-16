@@ -1,6 +1,8 @@
 package com.example.collegeupdates
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +12,21 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.collegeupdates.models.Notice
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.fragment_events.*
 import kotlinx.android.synthetic.main.fragment_events.view.*
 import kotlinx.android.synthetic.main.fragment_notice.*
 import kotlinx.android.synthetic.main.fragment_notice.AddButton
 import kotlinx.android.synthetic.main.fragment_notice.CameraButton
-import kotlinx.android.synthetic.main.fragment_notice.WriteButton
 
-
+private const val TAG = "NoticeFrag"
 class NoticeFrag : Fragment(R.layout.fragment_notice) {
+
+    private lateinit var firestoreDb : FirebaseFirestore
+    private lateinit var notices: MutableList<Notice>
+    private lateinit var adapter: newsadapter
 
 
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.rotate_open_anim) }
@@ -29,11 +37,11 @@ class NoticeFrag : Fragment(R.layout.fragment_notice) {
     private var clicked = false
 
     private lateinit var recyclerView: RecyclerView
-    private var dataholder = ArrayList<Datamodel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
     }
 
@@ -44,31 +52,42 @@ class NoticeFrag : Fragment(R.layout.fragment_notice) {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_notice, container, false)
         recyclerView = view.findViewById(R.id.rvnews)
-        recyclerView.setLayoutManager(LinearLayoutManager(context))
-        dataholder = ArrayList()
 
-        val ob1 = Datamodel(R.drawable.not2, "Posted @ Library", "12 Feb 2020")
-        dataholder.add(ob1)
-        val ob2 = Datamodel(R.drawable.not1, "Posted @ Notice Board", "17 July 2020")
-        dataholder.add(ob2)
-        val ob3 = Datamodel(R.drawable.not3, "Posted @ CDC", "7 June 2020")
-        dataholder.add(ob3)
-        val ob4 = Datamodel(R.drawable.not4, "Posted @ CSE Notice Board", "2 Aug 2020")
-        dataholder.add(ob4)
-        val ob5 = Datamodel(R.drawable.not5, "Posted @ Mech Notice Board", "28 Aug 2020")
-        dataholder.add(ob5)
-        val ob6 = Datamodel(R.drawable.not1, "Posted @ CDC Notice Board", "12 Sep 2020")
-        dataholder.add(ob6)
-        val ob7 = Datamodel(R.drawable.not2, "Posted @ EC Notice Board", "29 Sep 2020")
-        dataholder.add(ob7)
-        val ob8 = Datamodel(R.drawable.not3, "Posted @ IT Notice Board", "1 Oct 2020")
-        dataholder.add(ob8)
-        val ob9 = Datamodel(R.drawable.not4, "Posted @ Notice Board", "9 Oct 2020")
-        dataholder.add(ob9)
-        val ob10 = Datamodel(R.drawable.not5, "Posted @ Civil Notice Board", "18 Oct 2020")
-        dataholder.add(ob10)
 
-        recyclerView.adapter = newsadapter(dataholder)
+
+        // Create the Layout File which represents one post (CardView) - Done
+        // Create Data Source
+        notices = mutableListOf()
+        // Create the adapter
+        adapter = newsadapter(context!!, notices)
+        // Bind the adapter and Layout manager to the RV
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+
+        //Firebase
+        firestoreDb = FirebaseFirestore.getInstance()
+        val noticeReference = firestoreDb
+            .collection("notices")
+            .limit(15)
+            .orderBy("creation_time_ms", Query.Direction.DESCENDING)
+        noticeReference.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null)
+            {
+                // if we are in here, somethings wrong
+                Log.e(TAG, "Exception when querying posts", exception)
+                return@addSnapshotListener // returning early
+            }
+
+            val noticeList = snapshot.toObjects(Notice::class.java)
+            notices.clear()
+            notices.addAll(noticeList)
+
+            adapter.notifyDataSetChanged()
+            for (notice in noticeList) {
+                Log.i(TAG, "notice $notice")
+            }
+        }
 
 
         view.AddButton.setOnClickListener {
@@ -80,7 +99,10 @@ class NoticeFrag : Fragment(R.layout.fragment_notice) {
 //        }
 
         view.CameraButton.setOnClickListener {
-            Toast.makeText(context, "Camera was Clicked", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Camera was Clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, CreateCamActivity::class.java)
+            intent.putExtra(FragmentValue, "notices")
+            startActivity(intent)
         }
 
         return view
@@ -97,12 +119,12 @@ class NoticeFrag : Fragment(R.layout.fragment_notice) {
 
     private fun setAnimation(clicked: Boolean) {
         if (!clicked) {
-            WriteButton.startAnimation(fromBottom)
+            //WriteButton.startAnimation(fromBottom)
             CameraButton.startAnimation(fromBottom)
             AddButton.startAnimation(rotateOpen)
         }
         else {
-            WriteButton.startAnimation(toBottom)
+            //WriteButton.startAnimation(toBottom)
             CameraButton.startAnimation(toBottom)
             AddButton.startAnimation(rotateClose)
         }
@@ -110,22 +132,22 @@ class NoticeFrag : Fragment(R.layout.fragment_notice) {
 
     private fun setVisibility(clicked: Boolean) {
         if(!clicked) {
-            WriteButton.visibility = View.VISIBLE
+            //WriteButton.visibility = View.VISIBLE
             CameraButton.visibility = View.VISIBLE
         }
         else {
-            WriteButton.visibility = View.INVISIBLE
+            //WriteButton.visibility = View.INVISIBLE
             CameraButton.visibility = View.INVISIBLE
         }
     }
 
     private fun setClickable(clicked: Boolean) {
         if(!clicked) {
-            WriteButton.isClickable = false
+            //WriteButton.isClickable = false
             CameraButton.isClickable = false
         }
         else {
-            WriteButton.isClickable = true
+            //WriteButton.isClickable = true
             CameraButton.isClickable = true
         }
 

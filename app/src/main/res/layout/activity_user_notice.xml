@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".UserNoticeActivity">
+
+    <TextView
+        android:id="@+id/uploadsBanner"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Your Uploads"
+        android:textColor="@color/justBlack"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/rvUserNotice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvUserNotice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/uploadsBanner"
+        tools:layout_editor_absoluteX="68dp"
+        tools:layout_editor_absoluteY="152dp" />
+
+
+
+</LinearLayout>

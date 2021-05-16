@@ -1,17 +1,39 @@
 package com.example.collegeupdates
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.pdf.PdfDocument
+import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.model.ModelLoader
+import com.example.collegeupdates.models.Buses
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.fragment_transport.*
+import kotlinx.android.synthetic.main.fragment_transport.view.*
+import kotlinx.android.synthetic.main.single_row_design_transport.*
+
+
+private const val TAG = "TransportFrag"
 
 class TransportFrag : Fragment(R.layout.fragment_transport) {
 
     private lateinit var recyclerView: RecyclerView
-    private var dataholder = ArrayList<Datamodel>()
+//    private var dataholder = ArrayList<Datamodel>()
+    private lateinit var firestoreDb : FirebaseFirestore
+    private lateinit var buses: MutableList<Buses>
+    private lateinit var adapter: transportadapter
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,32 +49,53 @@ class TransportFrag : Fragment(R.layout.fragment_transport) {
         val view = inflater.inflate(R.layout.fragment_transport, container, false)
         recyclerView = view.findViewById(R.id.rvbuses)
         recyclerView.setLayoutManager(LinearLayoutManager(context))
-        dataholder = ArrayList()
 
-        val ob1 = Datamodel(R.drawable.buslogo, "G42", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob1)
-        val ob2 = Datamodel(R.drawable.buslogo, "G50", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob2)
-        val ob3 = Datamodel(R.drawable.buslogo, "G41", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob3)
-        val ob4 = Datamodel(R.drawable.buslogo, "G35", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob4)
-        val ob5 = Datamodel(R.drawable.buslogo, "G12", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob5)
-        val ob6 = Datamodel(R.drawable.buslogo, "G32", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob6)
-        val ob7 = Datamodel(R.drawable.buslogo, "G51", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob7)
-        val ob8 = Datamodel(R.drawable.buslogo, "G11", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob8)
-        val ob9 = Datamodel(R.drawable.buslogo, "G08", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob9)
-        val ob10 = Datamodel(R.drawable.buslogo, "G20", "Stop 1 > Stop 2 > Stop 3 > Stop 4 > Stop 5 > College")
-        dataholder.add(ob10)
 
-        recyclerView.adapter = transportadapter(dataholder)
+
+        // Create the Layout File which represents one post (CardView) - Done
+        // Create Data Source
+        buses = mutableListOf()
+        // Create the adapter
+        adapter = transportadapter(context!!, buses)
+        // Bind the adapter and Layout manager to the RV
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+
+        // FireBase
+        firestoreDb = FirebaseFirestore.getInstance()
+        val busesReference = firestoreDb
+            .collection("buses")
+            .limit(15)
+        busesReference.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null)
+            {
+                // if we are in here, somethings wrong
+                Log.e(TAG, "Exception when querying posts", exception)
+                return@addSnapshotListener // returning early
+            }
+
+            val busList = snapshot.toObjects(Buses::class.java)
+            buses.clear()
+            buses.addAll(busList)
+
+            adapter.notifyDataSetChanged()
+            for (bus in busList) {
+                Log.i(TAG, "bus $bus")
+            }
+        }
+
+        view.pdfButton.setOnClickListener {
+                val builder = CustomTabsIntent.Builder()
+                val CustomTabsIntent = builder.build()
+                CustomTabsIntent.launchUrl(context!!, Uri.parse("http://acropolis.in/wp-content/uploads/2017/08/New-Route-with-time-July-2017.pdf"))
+        }
+
+
+
 
         return view
     }
+
 
 }

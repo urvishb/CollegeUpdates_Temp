@@ -97,8 +97,23 @@ class MainActivity : AppCompatActivity(){
                 Log.i(TAG, "Failure fetching signed in user", exception)
             }
 
+        val fragmentAfterPost = intent.getStringExtra(CurrentFragment)
+
+        if(fragmentAfterPost.equals("notices"))
+        {
+            setCurrentFragment(secondFragment)
+            bottomNavigationView.setSelectedItemId(R.id.miNotice)
+        }
+        else if(fragmentAfterPost.equals("events"))
+        {
+            setCurrentFragment(firstFragment)
+            bottomNavigationView.setSelectedItemId(R.id.miEvents)
+        }
+
 
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_posts, menu)

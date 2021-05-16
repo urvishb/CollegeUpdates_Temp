@@ -9,6 +9,8 @@
 
     <color name="justBlack">#FF000000</color>
     <color name="justWhite">#FFFFFFFF</color>
+    <color name="justWhiteTrans50">#88FFFFFF</color>
+
 
     <color name="orange">#ff6a00</color>
     <color name="orangeLight">#ff9b3f</color>
