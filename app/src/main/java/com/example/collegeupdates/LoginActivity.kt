@@ -50,6 +50,34 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
+        sightModeBtn.setOnClickListener {
+            sightModeBtn.isEnabled = false
+            val sightEmail = "guest@test.com"
+            val sightPassword = "password"
+
+            if(sightEmail.isBlank() || sightPassword.isBlank())
+            {
+                Toast.makeText(this, "Email/Password cannot be empty", Toast.LENGTH_SHORT).show()
+                btnLogin.isEnabled = true
+                return@setOnClickListener
+            }
+
+            // Firebase Auth >>>
+
+            auth.signInWithEmailAndPassword(sightEmail, sightPassword).addOnCompleteListener { task ->
+                sightModeBtn.isEnabled = true
+
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Welcome to Sight Mode", Toast.LENGTH_SHORT).show()
+                    goMainActivity()
+                }
+                else {
+                    Log.e(TAG, "signInWithEmail failed (Sight Mode)", task.exception)
+                    Toast.makeText(this, "Authentication failed (Sight Mode)", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun goMainActivity() {

@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.collegeupdates.models.Notice
+import com.example.collegeupdates.models.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.fragment_events.*
@@ -24,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_notice.CameraButton
 private const val TAG = "NoticeFrag"
 class NoticeFrag : Fragment(R.layout.fragment_notice) {
 
+    private var signedInUser: User? = null
     private lateinit var firestoreDb : FirebaseFirestore
     private lateinit var notices: MutableList<Notice>
     private lateinit var adapter: newsadapter
@@ -89,9 +92,27 @@ class NoticeFrag : Fragment(R.layout.fragment_notice) {
             }
         }
 
+        // Get current signed in user
+        firestoreDb.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser?.uid as String)
+            .get().addOnSuccessListener { userSnapshot ->
+                signedInUser = userSnapshot.toObject(User::class.java)
+                Log.i(TAG, "signed in user: $signedInUser")
+            }.addOnFailureListener { exception ->
+                Log.i(TAG, "Failure fetching signed in user", exception)
+            }
+
 
         view.AddButton.setOnClickListener {
-            onAddButtonClicked()
+
+            if(signedInUser?.username == "guest")
+            {
+                Toast.makeText(context, "Add Button is Disabled", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                onAddButtonClicked()
+            }
         }
 
 //        view.WriteButton.setOnClickListener {

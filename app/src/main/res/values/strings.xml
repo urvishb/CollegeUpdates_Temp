@@ -20,4 +20,7 @@
         <item>MBA Block</item>
     </string-array>
     <string name="title_activity_maps">Map</string>
+    <string name="sightModeInfo">You are currently Logged into Sight Mode. This mode offers a limited functionality of the Campus sight app. Sight Mode is a way to let students have a sight of their campus and activities related to it. Also this helps us with content regulations on our app</string>
+    <string name="CSinfo">Campus Sight : Developed in Bharat with &lt;3. By Urvish Bundela, Simran Soni, Shreya Agrawal</string>
+    <string name="thanksGiving"><![CDATA[We Thank You for using Campus Sight <3]]></string>
 </resources>

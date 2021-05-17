@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.collegeupdates.models.Post
@@ -115,19 +116,32 @@ class MainActivity : AppCompatActivity(){
 
 
 
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_posts, menu)
-        return super.onCreateOptionsMenu(menu)
+
+            menuInflater.inflate(R.menu.menu_posts, menu)
+             return super.onCreateOptionsMenu(menu)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.menu_profile)
-        {
-            val intent = Intent(this, ProfileActivity::class.java)
-            intent.putExtra(EXTRA_USERNAME, signedInUser?.username)
-            startActivity(intent)
-        }
-        return super.onOptionsItemSelected(item)
+
+            if (item.itemId == R.id.menu_profile) {
+
+                if(signedInUser?.username == "guest")
+                {
+                    val intent = Intent(this, SightInfoActivity::class.java)
+                    startActivity(intent)
+                }
+                else
+                {
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.putExtra(EXTRA_USERNAME, signedInUser?.username)
+                    startActivity(intent)
+                }
+            }
+            return super.onOptionsItemSelected(item)
     }
 
     private fun setCurrentFragment(fragment: Fragment) =

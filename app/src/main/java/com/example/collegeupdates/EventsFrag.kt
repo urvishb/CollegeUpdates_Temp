@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.collegeupdates.databinding.FragmentEventsBinding
 import com.example.collegeupdates.models.Post
+import com.example.collegeupdates.models.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.fragment_events.*
@@ -27,6 +29,7 @@ private const val TAG = "EventsFrag"
 const val FragmentValue = "FRAGMENT_VALUE"
 class EventsFrag : Fragment(R.layout.fragment_events){
 
+    private var signedInUser: User? = null
     private lateinit var firestoreDb: FirebaseFirestore
     private lateinit var posts: MutableList<Post>
     private lateinit var adapter: eventsadapter
@@ -102,9 +105,27 @@ class EventsFrag : Fragment(R.layout.fragment_events){
             }
         })
 
+        // Get current signed in user
+        firestoreDb.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser?.uid as String)
+            .get().addOnSuccessListener { userSnapshot ->
+                signedInUser = userSnapshot.toObject(User::class.java)
+                Log.i(TAG, "signed in user: $signedInUser")
+            }.addOnFailureListener { exception ->
+                Log.i(TAG, "Failure fetching signed in user", exception)
+            }
+
 
         view.AddButton.setOnClickListener {
-            onAddButtonClicked()
+
+            if(signedInUser?.username == "guest")
+            {
+                Toast.makeText(context, "Add Button is Disabled", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                onAddButtonClicked()
+            }
         }
 
 //        view.WriteButton.setOnClickListener {
@@ -161,12 +182,12 @@ class EventsFrag : Fragment(R.layout.fragment_events){
 
     }
 
-    fun onItemClicked(post: Post) {
-
-        val toast = Toast.makeText(context, post.location, Toast.LENGTH_SHORT)
-        toast.show()
-
-    }
+//    fun onItemClicked(post: Post) {
+//
+//        val toast = Toast.makeText(context, post.location, Toast.LENGTH_SHORT)
+//        toast.show()
+//
+//    }
 
 
 

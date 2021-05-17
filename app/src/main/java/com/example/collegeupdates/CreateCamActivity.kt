@@ -89,6 +89,7 @@ class CreateCamActivity : AppCompatActivity() {
         }
 
         btnSubmit.setOnClickListener {
+            // pushing data on firebase via our submit button
             handleSubmitButtonClick()
         }
 
