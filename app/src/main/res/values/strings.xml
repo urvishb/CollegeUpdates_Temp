@@ -9,15 +9,24 @@
         <item>Auditorium</item>
         <item>CSE Department</item>
         <item>IT Department</item>
+        <item>G - 20</item>
+        <item>CDC</item>
+        <item>Cafe</item>
         <item>EC Department</item>
         <item>Mechanical Department</item>
         <item>Civil Department</item>
-        <item>BLock I</item>
+        <item>Block I</item>
+        <item>Block II</item>
+        <item>Block III</item>
         <item>CDC Lawn</item>
         <item>Canteen</item>
-        <item>Court</item>
-        <item>Ground</item>
+        <item>Basketball Court</item>
+        <item>Reception</item>
+        <item>Library</item>
+        <item>Workshop</item>
+        <item>Sports Ground</item>
         <item>MBA Block</item>
+        <item>Bus Area</item>
     </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="sightModeInfo">You are currently Logged into Sight Mode. This mode offers a limited functionality of the Campus sight app. Sight Mode is a way to let students have a sight of their campus and activities related to it. Also this helps us with content regulations on our app</string>

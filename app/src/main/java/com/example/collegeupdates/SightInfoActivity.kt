@@ -26,7 +26,7 @@ class SightInfoActivity : AppCompatActivity() {
         if (item.itemId == R.id.sight_mode_logout)
         {
             Log.i(TAG, "User wants to Logout")
-            Toast.makeText(this, "Logging out of Sight Mode", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Logging out from Sight Mode", Toast.LENGTH_SHORT).show()
             FirebaseAuth.getInstance().signOut()
 
             val logoutIntent = Intent(this, LoginActivity::class.java)

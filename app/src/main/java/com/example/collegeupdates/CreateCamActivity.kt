@@ -25,6 +25,7 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_create_cam.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.lang.ref.Reference
 
 private const val TAG = "CreateCamActivity"
 private const val PICK_PHOTO_CODE = 1234
@@ -137,7 +138,21 @@ class CreateCamActivity : AppCompatActivity() {
 
         val photoUploadUri = photoUri as Uri
 
-        val photoReference = storageReference.child("images/${System.currentTimeMillis()}-photo.jpg") // adding photo to image directory with name as current time in Milliseconds
+        // made latest changes here
+        //--------------------------------------
+
+        fragVal = intent.getStringExtra(FragmentValue).toString()
+
+        val photoReference: StorageReference
+
+        if(fragVal.equals("events"))
+        {
+            photoReference = storageReference.child("images/${System.currentTimeMillis()}-photo.jpg") // adding photo to image directory with name as current time in Milliseconds
+        }
+        else
+        {
+            photoReference = storageReference.child("notice_images/${System.currentTimeMillis()}-photo.jpg") // adding photo to image directory with name as current time in Milliseconds
+        }
         // Upload the image to Firebase Storage
         photoReference.putFile(photoUploadUri)
             .continueWithTask { photoUploadTask ->
@@ -146,7 +161,6 @@ class CreateCamActivity : AppCompatActivity() {
                 photoReference.downloadUrl
             }.continueWithTask {downloadUrlTask ->
                 // Create a post object with the image URL and add that to the post collection
-                fragVal = intent.getStringExtra(FragmentValue).toString()
 
                 if (fragVal.equals("events"))
                 {
