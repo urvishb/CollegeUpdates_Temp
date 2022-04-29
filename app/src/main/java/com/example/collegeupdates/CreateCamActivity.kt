@@ -50,8 +50,6 @@ class CreateCamActivity : AppCompatActivity() {
     private lateinit var storageReference : StorageReference
 
 
-
-
     @SuppressLint("QueryPermissionsNeeded")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
