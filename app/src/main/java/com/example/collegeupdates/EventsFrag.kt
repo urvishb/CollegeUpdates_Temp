@@ -35,8 +35,6 @@ class EventsFrag : Fragment(R.layout.fragment_events){
     private lateinit var adapter: eventsadapter
 
 
-
-
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.rotate_open_anim) }
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.rotate_close_anim) }
     private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.from_bottom_anim) }
@@ -73,18 +71,29 @@ class EventsFrag : Fragment(R.layout.fragment_events){
 
 
         // FireBase
+        // querying the database for events
+        // Fetching the Events posts from fire store
+        // we define the fire store database instance which points to the root at first
+        // then we create a variable postsReference, and this postReference will start at the root of the DB
+        // so we mention to look into the posts collection from here
+
+        // to query all the documents in a firebase collection we use the all powerful tool known as SnapshotListener
+        // >>>addSnapshotListener<<< is a way to tell firebase to inform you about any change which is made in the data
+        // which is kinda crucial for us for realtime updates
         firestoreDb = FirebaseFirestore.getInstance() // this is the root
         val postsReference = firestoreDb
-            .collection("posts")
-            .limit(20)
-            .orderBy("creation_time_ms", Query.Direction.DESCENDING)
+            .collection("posts") // specifying which collection we want
+            .limit(20) // limiting the data
+            .orderBy("creation_time_ms", Query.Direction.DESCENDING) // ordering it by time so the most recent post is on the top
         postsReference.addSnapshotListener { snapshot, exception ->
             //This is just an error check
             if (exception != null || snapshot == null) {
                 Log.e(TAG, "Exception when querying posts", exception)
                 return@addSnapshotListener
             }
-            val postList = snapshot.toObjects(Post::class.java)
+            // postList will have list of all the posts from the database
+            val postList = snapshot.toObjects(Post::class.java) // Encapsulating all the posts from the posts collection (which is in snapshot) to the Posts Data class
+
             posts.clear()
             posts.addAll(postList)
             adapter.notifyDataSetChanged()
@@ -95,7 +104,7 @@ class EventsFrag : Fragment(R.layout.fragment_events){
 
         adapter.setOnItemClickListener(object : eventsadapter.onItemClickListner{
             override fun onItemClick(position: Int) {
-                //Toast.makeText(context, "You Clicked on item no. $position", Toast.LENGTH_SHORT).show()
+
 
                 val intent = Intent(context, StoryActivity::class.java)
                 intent.putExtra("location", posts[position].location)

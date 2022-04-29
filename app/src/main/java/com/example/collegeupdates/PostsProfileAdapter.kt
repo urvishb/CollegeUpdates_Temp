@@ -16,7 +16,7 @@ class PostsProfileAdapter (val context: Context, val posts: List<Post>) :
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.single_row_design_events, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.single_row_design_events_profile, parent, false)
         return ViewHolder(view)
     }
 

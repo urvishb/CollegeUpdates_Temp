@@ -20,12 +20,18 @@ import com.example.collegeupdates.models.Post
 import com.example.collegeupdates.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_create_cam.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.lang.ref.Reference
+import java.time.Duration
 
 private const val TAG = "CreateCamActivity"
 private const val PICK_PHOTO_CODE = 1234
@@ -34,6 +40,7 @@ private lateinit var photoFile : File
 private const val FILE_NAME = "photo.jpg"
 private var fragVal = "events"
 const val CurrentFragment = "CurrentFragment"
+const val TOPIC = "/topics/myTopic"
 
 class CreateCamActivity : AppCompatActivity() {
 
@@ -42,10 +49,15 @@ class CreateCamActivity : AppCompatActivity() {
     private lateinit var firestoreDb : FirebaseFirestore
     private lateinit var storageReference : StorageReference
 
+
+
+
     @SuppressLint("QueryPermissionsNeeded")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_cam)
+
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
         storageReference = FirebaseStorage.getInstance().reference
 
@@ -91,7 +103,13 @@ class CreateCamActivity : AppCompatActivity() {
 
         btnSubmit.setOnClickListener {
             // pushing data on firebase via our submit button
+
+
+
             handleSubmitButtonClick()
+
+
+
         }
 
 
@@ -162,6 +180,9 @@ class CreateCamActivity : AppCompatActivity() {
             }.continueWithTask {downloadUrlTask ->
                 // Create a post object with the image URL and add that to the post collection
 
+
+
+
                 if (fragVal.equals("events"))
                 {
                     val post = Post(
@@ -191,8 +212,28 @@ class CreateCamActivity : AppCompatActivity() {
                 etLocation.text.clear()
                 imageView.setImageResource(0)
                 Toast.makeText(this, "Uploaded Successfully!", Toast.LENGTH_SHORT).show()
+
+                // TODO : Notification
+
+                val title = "New ${fragVal}!"
+                val message = "See what's Happening"
+
+                if(message.isNotEmpty() && title.isNotEmpty()) {
+                    PushNotification(
+                        NotificationData(title, message),
+                        TOPIC
+                    ).also {
+                        sendNotification(it)
+                    }
+                    //Toast.makeText(this, "Notification Posted", Toast.LENGTH_LONG).show()
+                }
+
+
                 val profileIntent = Intent(this, ProfileActivity::class.java)
                 val homeIntent = Intent(this, MainActivity::class.java)
+
+
+
                 homeIntent.putExtra(CurrentFragment, fragVal)
                 profileIntent.putExtra(EXTRA_USERNAME, signedInUser?.username)
                 startActivity(homeIntent)
@@ -234,6 +275,19 @@ class CreateCamActivity : AppCompatActivity() {
         } else
         {
             super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun sendNotification(notification : PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful) {
+                Log.d(TAG, "Response : ${Gson().toJson(response)}")
+            } else {
+                Log.e(TAG, response.errorBody().toString())
+            }
+        } catch (e : Exception) {
+            Log.e(TAG, e.toString())
         }
     }
 }

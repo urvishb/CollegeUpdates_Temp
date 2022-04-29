@@ -1,5 +1,5 @@
 package com.example.collegeupdates.models
-
+// encapsulation
 import com.google.firebase.firestore.PropertyName
 
 data class Post(

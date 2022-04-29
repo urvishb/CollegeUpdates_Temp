@@ -82,6 +82,11 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        /*
+        Logging user out >>>
+        The logout is also handled by the FireBase AUTH here where we have the method signOut()
+         */
         if(item.itemId == R.id.menu_logout)
         {
             Log.i(TAG, "User wants to logout")
